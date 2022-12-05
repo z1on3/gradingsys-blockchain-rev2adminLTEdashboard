@@ -1,0 +1,157 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add Grades {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}    
+
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Grading System</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Add Grades</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-8">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Grades</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="/add_grades" method="POST">
+                <input type="hidden" name="instructor" value="Professor X,INS-00001">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12 form-group">
+                      <label for="student">Student</label>
+                      <select class="form-control" name="student" id="student">
+                        <option value="Carlo Vicente Villanobos,STUD-00001" selected="true" id="">Carlo Vicente Villanobos</option>
+                        <option value="Student B,STUD-00002" id="">Student B</option>
+                        <option value="Student C,STUD-00003" id="">Student C</option>
+                      </select>
+                    </div>
+                    <div class="col-8 form-group">
+                      <label for="subj">Subject</label>
+                      <select class="form-control" name="subject" id="subj">
+                        <option value="APPLICATION DEVELOPMENT & EMERGING TECHNOLOGY,cc106" selected="true" id="subject-0">CC 106</option>
+                        <option value="DATA MINING,adv6" id="subject-1">ADV 6</option>
+                        <option value="INFORMATION ASSURANCE & SECURITY,ias1" id="subject-2">IAS 1</option>
+                    </select>
+                    </div>
+                    <div class="col-4 form-group">
+                      <label for="grade">Grade</label>
+                      <input type="text" class="form-control" data-inputmask="'alias': '9.9'" data-mask="" inputmode="numeric" placeholder="1.0-5.0 (0.0 for INC)" name="grade"/>
+                    </div>
+                  </div>
+ 
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <div class="col-md-4">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Latest Blocks</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    {% for x in range(lc-1, lc-4, -1) %}
+                    <div class="col-md-12">
+                      <div class="card card-success">
+                        <div class="card-header">
+                          <h3 class="card-title">Block #{{x}}</h3>
+          
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                          <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          {{ bc[x].transaction }}
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <!-- /.card -->
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- bs-custom-file-input -->
+  <script src="/static/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/static/assets/js/adminlte.min.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="/static/assets/js/demo.js"></script>
+  <script src="/static/assets/plugins/inputmask/jquery.inputmask.min.js"></script>
+  <script>
+  $(function () {
+    bsCustomFileInput.init();
+  });
+  $(document).ready(function(){
+    $(":input").inputmask();
+   /*
+   or    Inputmask().mask(document.querySelectorAll("input"));*/
+  });
+  </script>
+
+{% endblock javascripts %}

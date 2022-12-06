@@ -29,7 +29,7 @@ def display_chain():
 def index():
     if current_user.role == 99:
         return render_template('home/admin-index.html', segment='index', chain = display_chain(), lc = len(blockchain.chain), bc = blockchain.chain)
-    return render_template('home/index.html', segment='index')
+    return render_template('home/admin-index.html', segment='index', chain = display_chain(), lc = len(blockchain.chain), bc = blockchain.chain)
 
 @blueprint.route('/add_grades', methods=['GET', 'POST'])
 @login_required

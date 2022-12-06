@@ -83,14 +83,20 @@
       <div class="row">
         <div class="col-lg-6 col-6">
           <!-- small box -->
-          <div class="small-box bg-success">
+          <div
+            class="small-box {% if chain.valid == True %}bg-success{% else %}bg-danger{% endif %}"
+          >
             <div class="inner">
-              <h3>{{ chain.valid }}</h3>
+              <h3>
+                {% if chain.valid == True %}Valid{% else %}Invalid{% endif %}
+              </h3>
 
-              <p>Chain Valid</p>
+              <p>Chain Integrity</p>
             </div>
             <div class="icon">
-              <i class="ion ion-checkmark"></i>
+              <i
+                class="ion {% if chain.valid == True %}ion-checkmark{% else %}ion-alert-circled{% endif %}"
+              ></i>
             </div>
             <a href="#" class="small-box-footer"
               >More info <i class="fas fa-arrow-circle-right"></i
@@ -135,27 +141,47 @@
                 <div class="col-md-12">
                   <div class="card card-info">
                     <div class="card-header">
-                      <h3 class="card-title">
-                        Block #{{x}} mined on {{ bc[x].timestamp }}
-                      </h3>
+                      <div class="row">
+                        <div class="col-8">
+                          <h3 class="card-title">
+                            {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
+                            GENESIS BLOCK mined on {{ bc[x].timestamp }} {% else
+                            %} Block #{{x}} mined on {{ bc[x].timestamp }} {%
+                            endif %}
+                          </h3>
+                        </div>
 
-                      <div class="card-tools">
-                        <span class="badge badge-warning right"
-                          >{{ bc[x].nonce }}</span
-                        >
-                        <button
-                          type="button"
-                          class="btn btn-tool"
-                          data-card-widget="collapse"
-                        >
-                          <i class="fas fa-minus"></i>
-                        </button>
+                        <div class="col-4 text-right">
+                          <div class="card-tools">
+                            <span class="badge badge-warning right"
+                              >{{ bc[x].nonce }}</span
+                            >
+                            <button
+                              type="button"
+                              class="btn btn-tool"
+                              data-card-widget="collapse"
+                            >
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <!-- /.card-tools -->
                       </div>
-
-                      <!-- /.card-tools -->
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body">{{ bc[x].transaction }}</div>
+                    <div class="card-body">
+                      TRANSACTION:
+                      <pre id="id{{x}}"></pre>
+                      PREVIOUS HASH:
+                      <pre><span class="badge badge-info right"
+                            >{{ bc[x].previous_hash }}</span
+                          ></pre>
+                      HASH:
+                      <pre><span class="badge badge-success right"
+                            >{{ bc[x].hash }}</span
+                          ></pre>
+                    </div>
+
                     <!-- /.card-body -->
                   </div>
                   <!-- /.card -->
@@ -240,7 +266,38 @@
 <script src="/static/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge("uibutton", $.ui.button);
+    $.widget.bridge("uibutton", $.ui.button);
+
+    {% for x in range(lc) %}
+    {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
+      var data{{x}} = {
+        'type':"GENESIS BLOCK",
+        'sysname': "Grading System using Blockchain Technology POC",
+        'author': "CARLO VICENTE VILLANOBOS"
+      }
+
+      document.getElementById("id{{x}}").textContent = JSON.stringify(data{{x}}, undefined, 4);
+    {% elif bc[x].transaction.type == 'grade' %}
+    var data{{x}} = {
+      "type": "grade",
+      "subject": {
+          "name": "{{bc[x].transaction.subject.name}}",
+          "id": "{{bc[x].transaction.subject.id}}"
+      },
+      "grade": "{{bc[x].transaction.grade}}",
+      "instructor": {
+          "name": "{{bc[x].transaction.instructor.name}}",
+          "id": "{{bc[x].transaction.instructor.id}}"
+      },
+      "student": {
+          "name": "{{bc[x].transaction.student.name}}",
+          "id": "{{bc[x].transaction.student.id}}"
+      }
+  }
+
+    document.getElementById("id{{x}}").textContent = JSON.stringify(data{{x}}, undefined, 4);
+    {% endif %}
+    {% endfor %}
 </script>
 <!-- Bootstrap 4 -->
 <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -266,5 +323,6 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/static/assets/js/demo.js"></script>
 <script src="/static/assets/js/all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
 {% endblock javascripts %}

@@ -43,7 +43,7 @@
       <div class="container-fluid">
         <div class="row">
           <!-- left column -->
-          <div class="col-md-8">
+          <div class="col-md-7">
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
@@ -57,7 +57,7 @@
                   <div class="row">
                     <div class="col-12 form-group">
                       <label for="student">Student</label>
-                      <select class="form-control" name="student" id="student">
+                      <select class="form-control" name="student" id="student" required>
                         <option value="Carlo Vicente Villanobos,STUD-00001" selected="true" id="">Carlo Vicente Villanobos</option>
                         <option value="Student B,STUD-00002" id="">Student B</option>
                         <option value="Student C,STUD-00003" id="">Student C</option>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-8 form-group">
                       <label for="subj">Subject</label>
-                      <select class="form-control" name="subject" id="subj">
+                      <select class="form-control" name="subject" id="subj" required>
                         <option value="APPLICATION DEVELOPMENT & EMERGING TECHNOLOGY,cc106" selected="true" id="subject-0">CC 106</option>
                         <option value="DATA MINING,adv6" id="subject-1">ADV 6</option>
                         <option value="INFORMATION ASSURANCE & SECURITY,ias1" id="subject-2">IAS 1</option>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-4 form-group">
                       <label for="grade">Grade</label>
-                      <input type="text" class="form-control" data-inputmask="'alias': '9.9'" data-mask="" inputmode="numeric" placeholder="1.0-5.0 (0.0 for INC)" name="grade"/>
+                      <input type="text" class="form-control" data-inputmask="'alias': '9.9'" data-mask="" inputmode="numeric" placeholder="1.0-5.0 (0.0 for INC)" name="grade" required/>
                     </div>
                   </div>
  
@@ -88,7 +88,7 @@
             <!-- /.card -->
 
           </div>
-          <div class="col-md-4">
+          <div class="col-md-5">
               <div class="card card-primary">
                 <div class="card-header">
                   <h3 class="card-title">Latest Blocks</h3>
@@ -97,19 +97,41 @@
                   <div class="row">
                     {% for x in range(lc-1, lc-4, -1) %}
                     <div class="col-md-12">
-                      <div class="card card-success">
+                      <div class="card card-info">
                         <div class="card-header">
-                          <h3 class="card-title">Block #{{x}}</h3>
-          
+                          <h3 class="card-title">
+                            {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
+                            GENESIS BLOCK mined on {{ bc[x].timestamp }} {% else %}
+                            Block #{{x}} mined on {{ bc[x].timestamp }} {% endif %}
+                          </h3>
+    
                           <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                            <span class="badge badge-warning right"
+                              >{{ bc[x].nonce }}</span
+                            >
+                            <button
+                              type="button"
+                              class="btn btn-tool"
+                              data-card-widget="collapse"
+                            >
+                              <i class="fas fa-minus"></i>
                             </button>
                           </div>
+    
                           <!-- /.card-tools -->
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                          {{ bc[x].transaction }}
+                          TRANSACTION:
+                          <pre id="id{{x}}"></pre>
+                          PREVIOUS HASH: 
+                          <pre><span class="badge badge-info right"
+                            >{{ bc[x].previous_hash }}</span
+                          ></pre>
+                          HASH:
+                          <pre><span class="badge badge-success right"
+                            >{{ bc[x].hash }}</span
+                          ></pre>
                         </div>
                         <!-- /.card-body -->
                       </div>
@@ -152,6 +174,37 @@
    /*
    or    Inputmask().mask(document.querySelectorAll("input"));*/
   });
+
+  {% for x in range(lc-1, lc-4, -1) %}
+    {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
+      var data{{x}} = {
+        'type':"GENESIS BLOCK",
+        'sysname': "Grading System using Blockchain Technology POC",
+        'author': "CARLO VICENTE VILLANOBOS"
+      }
+
+      document.getElementById("id{{x}}").textContent = JSON.stringify(data{{x}}, undefined, 4);
+    {% elif bc[x].transaction.type == 'grade' %}
+    var data{{x}} = {
+      "type": "grade",
+      "subject": {
+          "name": "{{bc[x].transaction.subject.name}}",
+          "id": "{{bc[x].transaction.subject.id}}"
+      },
+      "grade": "{{bc[x].transaction.grade}}",
+      "instructor": {
+          "name": "{{bc[x].transaction.instructor.name}}",
+          "id": "{{bc[x].transaction.instructor.id}}"
+      },
+      "student": {
+          "name": "{{bc[x].transaction.student.name}}",
+          "id": "{{bc[x].transaction.student.id}}"
+      }
+  }
+
+    document.getElementById("id{{x}}").textContent = JSON.stringify(data{{x}}, undefined, 4);
+    {% endif %}
+    {% endfor %}
   </script>
 
 {% endblock javascripts %}

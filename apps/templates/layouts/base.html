@@ -9,6 +9,10 @@
     <title>{% block title %}{% endblock %} | Grading Sys</title>
 
     {% block stylesheets %}{% endblock stylesheets %}
+    <link
+      rel="stylesheet"
+      href="/static/assets/plugins/toastr/toastr.min.css"
+    />
   </head>
   <body
     class="hold-transition layout-navbar-fixed layout-footer-fixed layout-fixed {% block body_class %}{% endblock body_class %}"
@@ -28,6 +32,7 @@
     <!-- ./wrapper -->
 
     <!-- Specific Page JS goes HERE  -->
+
     {% block javascripts %}{% endblock javascripts %}
   </body>
 </html>

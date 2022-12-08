@@ -95,27 +95,35 @@
                 </div>
                 <div class="card-body">
                   <div class="row">
-                    {% for x in range(lc-1, lc-4, -1) %}
+                    {% for x in range(lc-1, -1, -1) %}
                     <div class="col-md-12">
-                      <div class="card card-info">
+                      <div class="card card-info collapsed-card">
                         <div class="card-header">
-                          <h3 class="card-title">
-                            {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
-                            GENESIS BLOCK mined on {{ bc[x].timestamp }} {% else %}
-                            Block #{{x}} mined on {{ bc[x].timestamp }} {% endif %}
-                          </h3>
+                          <div class="row">
+                            <div class="col-8">
+                              <h3 class="card-title">
+                                {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
+                                GENESIS BLOCK mined on {{ bc[x].timestamp }} {% else
+                                %} Block #{{x}} mined on {{ bc[x].timestamp }} {%
+                                endif %}
+                              </h3>
+                            </div>
     
-                          <div class="card-tools">
-                            <span class="badge badge-warning right"
-                              >{{ bc[x].nonce }}</span
-                            >
-                            <button
-                              type="button"
-                              class="btn btn-tool"
-                              data-card-widget="collapse"
-                            >
-                              <i class="fas fa-minus"></i>
-                            </button>
+                            <div class="col-4 text-right">
+                              <div class="card-tools">
+                                <span class="badge badge-warning right"
+                                  >{{ bc[x].nonce }}</span
+                                >
+                                <button
+                                  type="button"
+                                  class="btn btn-tool"
+                                  data-card-widget="collapse"
+                                >
+                                  <i class="fas fa-plus"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <!-- /.card-tools -->
                           </div>
     
                           <!-- /.card-tools -->
@@ -164,8 +172,31 @@
   <script src="/static/assets/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="/static/assets/js/demo.js"></script>
+  <script src="/static/assets/plugins/toastr/toastr.min.js"></script>
   <script src="/static/assets/plugins/inputmask/jquery.inputmask.min.js"></script>
   <script>
+    toastr.options = {
+      "closeButton": false,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": false,
+      "positionClass": "toast-bottom-center",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+    {% if graded == False %}
+    toastr["error"]("Stud has already been graded on time.", "Error Grading");
+    {% elif graded == True %}
+    toastr["success"]("Stud's grade has been successfully added on the block chain", "Successful Grading");
+    {% endif %}
   $(function () {
     bsCustomFileInput.init();
   });
@@ -175,7 +206,7 @@
    or    Inputmask().mask(document.querySelectorAll("input"));*/
   });
 
-  {% for x in range(lc-1, lc-4, -1) %}
+  {% for x in range(lc-1, -1, -1) %}
     {% if bc[x].transaction.type == 'GENESIS BLOCK' %}
       var data{{x}} = {
         'type':"GENESIS BLOCK",

@@ -41,7 +41,6 @@ def addg():
         ins = request.form.get('instructor').split(',')
         subj = request.form.get('subject').split(',')
         grade = request.form.get('grade')
-        
 
         data = {
             "type": "grade",
@@ -59,8 +58,16 @@ def addg():
                 "id": stud[1]
             }
         }
+        
+        grades = blockchain.show_grades(stud[1])
+        for x in range(len(grades)):
+            print(grades[x]["subject"]["id"])
+            if subj[1] == grades[x]["subject"]["id"]:
+                print(grades[x]["subject"]["id"]+" -> Already Graded")
+                return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, graded = False, lc = len(blockchain.chain))
+        
         xblock = blockchain.create_block(data)
-        return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, latestb = xblock, lc = len(blockchain.chain))
+        return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, latestb = xblock, lc = len(blockchain.chain), graded = True)
     else:
         if current_user.role == 99 | 1:
             return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, lc = len(blockchain.chain))

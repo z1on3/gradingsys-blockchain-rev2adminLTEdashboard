@@ -2,7 +2,7 @@ import datetime
 import hashlib
 import json
 import os
-from flask import Flask, jsonify, render_template, request
+from flask import Flask
 
 
 class Blockchain:
@@ -35,10 +35,8 @@ class Blockchain:
                     'previous_hash': "0"
                 }
         mine_gen = self.proof_of_work(gen_block)
-        nonce = mine_gen[0]
-        genhash = mine_gen[1]
-        gen_block['nonce'] = nonce
-        gen_block['hash'] = genhash
+        gen_block['nonce'] = mine_gen[0]
+        gen_block['hash'] =  mine_gen[1]
         self.chain.append(gen_block)
         json_object = json.dumps(self.chain, indent=4)
         xf = open("gradeschain.json", "w+")
@@ -66,15 +64,22 @@ class Blockchain:
             return False
         self.chain.append(block)
         json_object = json.dumps(self.chain, indent=4)
-        file = open("gradeschain.json", "w+")
-        file.write(json_object)
-        file.close()
+        xf = open("gradeschain.json", "w+")
+        xf.write(json_object)
+        xf.close()
         return block
 
     # This function is created
     # to display the previous block
     def print_previous_block(self):
         return self.chain[-1]
+
+    def gen_hash(self, nonce, block):
+        x = str(nonce**2)
+        y = json.dumps(block, sort_keys=True)
+        z = x+y
+        hash_c = hashlib.sha256(z.encode()).hexdigest()
+        return hash_c
 
     # This is the function for proof of work
     # and used to successfully mine the block
@@ -83,17 +88,16 @@ class Blockchain:
         check_proof = False
 
         while check_proof is False:
-            x = str(new_proof**2)
+            
             data['nonce'] = new_proof
-            y = json.dumps(data, sort_keys=True)
-            z = x+y
-            hash_operation = hashlib.sha256(z.encode()).hexdigest()
-            if hash_operation[:4] == '0000' and hash_operation[4] != '0':
+            xhash = self.gen_hash(new_proof, data)
+
+            if xhash[:4] == '0000' and xhash[4] != '0':
                 check_proof = True
             else:
                 new_proof += 1
 
-        return new_proof, hash_operation
+        return new_proof, xhash
 
     def hash(self, block):
         # set hash to zero first because while we calcuted this blocks hash it's value was zero
@@ -101,11 +105,9 @@ class Blockchain:
         dhash = data['hash']
         data['hash'] = 0
         proof = block['nonce']
-        x = str(proof**2)
-        y = json.dumps(data, sort_keys=True)
-        z = x+y
+        bhash = self.gen_hash(proof, data)
         data['hash'] = dhash
-        return hashlib.sha256(z.encode()).hexdigest()
+        return bhash
 
     def chain_valid(self, chain):
         previous_block = chain[0]

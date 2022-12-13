@@ -112,8 +112,9 @@ class Blockchain:
     def chain_valid(self, chain):
         previous_block = chain[0]
         block_index = 1
+        cl = len(chain)
 
-        while block_index < len(chain):
+        while block_index < cl:
             block = chain[block_index]
             block_hash = self.hash(previous_block)
             if block['previous_hash'] != block_hash:
@@ -124,7 +125,10 @@ class Blockchain:
 
             previous_block = block
             block_index += 1
-
+        lblock = chain[cl-1]
+        lbhash = self.hash(lblock)
+        if lbhash != lblock['hash']:
+            return False
         return True
 
     def create_block(self, data):

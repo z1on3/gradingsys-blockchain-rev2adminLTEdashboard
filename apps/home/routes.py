@@ -31,6 +31,21 @@ def index():
         return render_template('home/admin-index.html', segment='index', chain = display_chain(), lc = len(blockchain.chain), bc = blockchain.chain)
     return render_template('home/admin-index.html', segment='index', chain = display_chain(), lc = len(blockchain.chain), bc = blockchain.chain)
 
+@blueprint.route('/show_grades', methods=['GET', 'POST'])
+@login_required
+def showg():
+    if current_user.role == 99:
+        
+        if request.method == 'POST':
+            stud = request.form.get('sid')
+            sgrades = blockchain.show_grades(stud)
+            if len(sgrades["grades"]) == 0:
+                return render_template('home/search-grades.html', segment='show_grades')
+            return render_template('home/show-grades.html', segment='show_grades', grades = sgrades, lg = len(sgrades["grades"]), bc = blockchain.chain, sid = stud)
+        else:
+            return render_template('home/search-grades.html', segment='show_grades')
+    return render_template('home/page-403.html'), 403
+
 @blueprint.route('/add_grades', methods=['GET', 'POST'])
 @login_required
 def addg():
@@ -60,10 +75,9 @@ def addg():
         }
         
         grades = blockchain.show_grades(stud[1])
-        for x in range(len(grades)):
-            print(grades[x]["subject"]["id"])
-            if subj[1] == grades[x]["subject"]["id"]:
-                print(grades[x]["subject"]["id"]+" -> Already Graded")
+        for x in range(len(grades["grades"])):
+            if subj[1] == grades["grades"][x]["subject"]["id"]:
+                #print(grades["grades"][x]["subject"]["id"]+" -> Already Graded")
                 return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, graded = False, lc = len(blockchain.chain))
         
         xblock = blockchain.create_block(data)
@@ -85,7 +99,7 @@ def route_template(template):
         segment = get_segment(request)
 
         # Serve the file (if exists) from app/templates/home/FILE.html
-        return render_template("home/" + template, segment=segment)
+        return render_template("home/unused-templates/" + template, segment=segment)
 
     except TemplateNotFound:
         return render_template('home/page-404.html'), 404

@@ -4,14 +4,16 @@ import json
 import os
 from flask import Flask, jsonify, render_template, request
 
+gcf = "gradeschain.json"
 
 class Blockchain:
 
+    
     # This function is created
     # to create the very first
     # block and set its hash to "0"
     def __init__(self):
-        gcf = "gradeschain.json"
+        
 
         if (os.path.exists(gcf)):
             cf = open(gcf, "r")
@@ -41,7 +43,7 @@ class Blockchain:
         gen_block['hash'] = genhash
         self.chain.append(gen_block)
         json_object = json.dumps(self.chain, indent=4)
-        xf = open("gradeschain.json", "w+")
+        xf = open(gcf, "w+")
         xf.write(json_object)
         xf.close()
         return gen_block
@@ -66,9 +68,9 @@ class Blockchain:
             return False
         self.chain.append(block)
         json_object = json.dumps(self.chain, indent=4)
-        file = open("gradeschain.json", "w+")
-        file.write(json_object)
-        file.close()
+        xfile = open(gcf, "w+")
+        xfile.write(json_object)
+        xfile.close()
         return block
 
     # This function is created
@@ -128,7 +130,6 @@ class Blockchain:
     def create_block(self, data):
 
         previous_block = self.print_previous_block()
-        previous_proof = previous_block['nonce']
 
         ts = str(datetime.datetime.now())
         index = len(self.chain)
@@ -160,20 +161,30 @@ class Blockchain:
         chain = self.chain
         index = 1
         grades = []
+        name = ""
         while index < len(chain):
-            type = chain[index]['transaction']['type']
+            ttype = chain[index]['transaction']['type']
             
-            if type == 'grade':
+            if ttype == 'grade':
                 stud = chain[index]['transaction']['student']['id']
                 if stud == sid:
+                    if name == "":
+                        name = chain[index]['transaction']['student']['name']
                     grade = chain[index]['transaction']['grade']
                     subj = chain[index]['transaction']['subject']
                     grades.append({
+                        'timestamp': chain[index]['timestamp'],
                         'subject': subj,
-                        'grade': grade
+                        'grade': grade,
+                        'instructor': chain[index]['transaction']['instructor']['name']
                     })
 
             index += 1
+        grades_json = {
+            "name": name,
+            "sid": sid,
+            "grades": grades
 
-        return grades
+        }
+        return grades_json
 

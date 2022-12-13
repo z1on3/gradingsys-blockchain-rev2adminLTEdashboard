@@ -15,11 +15,11 @@ gen_block = {
                     'previous_hash': "0"
                 }
 
-#print(bc.proof_of_work(gen_block))
+#print(bc.proof_of_work(gen_block))s
 
 grades = bc.show_grades("STUD-00001")
 print(len(grades))
-#print(grades[0]["subject"]["id"])
+print(grades["name"])
 
 for x in range(len(grades)):
     print(x)

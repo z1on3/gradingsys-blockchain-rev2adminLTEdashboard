@@ -74,12 +74,7 @@ class Blockchain:
     def print_previous_block(self):
         return self.chain[-1]
 
-    def gen_hash(self, nonce, block):
-        x = str(nonce**2)
-        y = json.dumps(block, sort_keys=True)
-        z = x+y
-        hash_c = hashlib.sha256(z.encode()).hexdigest()
-        return hash_c
+    
 
     # This is the function for proof of work
     # and used to successfully mine the block
@@ -99,6 +94,13 @@ class Blockchain:
 
         return new_proof, xhash
 
+    def gen_hash(self, nonce, block):
+        x = str(nonce**2)
+        y = json.dumps(block, sort_keys=True)
+        z = x+y
+        hash_c = hashlib.sha256(z.encode()).hexdigest()
+        return hash_c
+        
     def hash(self, block):
         # set hash to zero first because while we calcuted this blocks hash it's value was zero
         data = block

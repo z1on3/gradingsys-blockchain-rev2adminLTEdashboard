@@ -3,7 +3,7 @@ import datetime
 import hashlib
 import json
 import os
-
+#optimize code from chatgpt
 Block = namedtuple('Block', ['index', 'timestamp', 'transaction', 'nonce', 'previous_hash', 'hash'])
 
 class Blockchain:

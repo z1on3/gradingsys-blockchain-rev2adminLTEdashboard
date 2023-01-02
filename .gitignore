@@ -33,3 +33,4 @@ apps/static/assets/.temp
 
 gradeschain.json
 .env
+sftp-config.json

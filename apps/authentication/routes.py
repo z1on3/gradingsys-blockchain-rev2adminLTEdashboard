@@ -47,7 +47,7 @@ def login():
     return redirect(url_for('home_blueprint.index'))
 
 
-@blueprint.route('/register', methods=['GET', 'POST'])
+@blueprint.route('/bawalpamagregisterdiri', methods=['GET', 'POST'])
 def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:

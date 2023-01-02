@@ -27,7 +27,7 @@
           href="{{ url_for('authentication_blueprint.logout') }}"
           class="d-block"
         >
-          {{ current_user.username }} : {{ current_user.role }} - Logout
+          {{ current_user.username }} - Logout
         </a>
       </div>
     </div>
@@ -60,7 +60,7 @@
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
-        <li class="nav-header">ADMIN MENU</li>
+        <li class="nav-header">MENU</li>
         <li
           class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}"
         >
@@ -69,7 +69,7 @@
             class="nav-link {% if 'index' in segment %} active {% endif %}"
           >
             <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Admin Dashboard</p>
+            <p>Dashboard</p>
           </a>
         </li>
         <li class="nav-item">

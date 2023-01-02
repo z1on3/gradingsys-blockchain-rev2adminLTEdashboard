@@ -32,8 +32,8 @@ Here is a sample:
 DEBUG=False                 # False enables the MySql Persistence
 
 DB_ENGINE=mysql             # Database Driver
-DB_NAME=appseed_db          # Database Name
-DB_USERNAME=appseed_db_usr  # Database User
+DB_NAME=app_db          # Database Name
+DB_USERNAME=app_db_usr  # Database User
 DB_PASS=STRONG_PASS_HERE    # Password
 DB_HOST=localhost           # Database HOST, default is localhost
 DB_PORT=3306                # MySql port, default = 3306

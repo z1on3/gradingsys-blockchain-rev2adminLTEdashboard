@@ -1,3 +1,7 @@
+## PROJECT FOR CC106
+
+**AUTHOR:** CARLO VICENTE VILLANOBOS
+
 ## ✨ Set up the MySql Database
 
 **Note:** Make sure your Mysql server is properly installed and accessible.

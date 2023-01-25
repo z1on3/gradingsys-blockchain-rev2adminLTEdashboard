@@ -73,15 +73,15 @@ def addg():
                 "id": stud[1]
             }
         }
-        
+        #
         grades = blockchain.show_grades(stud[1])
         for x in range(len(grades["grades"])):
             if subj[1] == grades["grades"][x]["subject"]["id"]:
                 #print(grades["grades"][x]["subject"]["id"]+" -> Already Graded")
-                return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, graded = False, lc = len(blockchain.chain))
+                return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, graded = False, lc = len(blockchain.chain), ts = grades["grades"][x]["timestamp"], sname = grades["name"] , subid = grades["grades"][x]["subject"]["id"])
         
         xblock = blockchain.create_block(data)
-        return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, latestb = xblock, lc = len(blockchain.chain), graded = True)
+        return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, latestb = xblock, lc = len(blockchain.chain), graded = True, sname = data["student"]["name"])
     else:
         if current_user.role == 99 | 1:
             return render_template('home/add_grades.html', segment = 'add_grades', bc = blockchain.chain, lc = len(blockchain.chain))

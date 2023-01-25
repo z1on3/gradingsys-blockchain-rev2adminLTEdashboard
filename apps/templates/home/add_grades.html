@@ -35,7 +35,7 @@
             </ol>
           </div>
         </div>
-      </div><!-- /.container-fluid -->
+      </div><!-- /.container-fluid  -->
     </section>
 
     <!-- Main content -->
@@ -193,9 +193,9 @@
       "hideMethod": "fadeOut"
     }
     {% if graded == False %}
-    toastr["error"]("Stud has already been graded on time.", "Error Grading");
+    toastr["error"]("{{subid}} of {{sname}} has already been graded on {{ts}}.", "Error Grading");
     {% elif graded == True %}
-    toastr["success"]("Stud's grade has been successfully added on the block chain", "Successful Grading");
+    toastr["success"]("{{sname}}'s grade has been successfully added on the block chain", "Successful Grading");
     {% endif %}
   $(function () {
     bsCustomFileInput.init();
